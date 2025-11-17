@@ -55,5 +55,9 @@ public:
 
 private:
     //==============================================================================
+
+    juce::Synthesiser synth;
+    static const int NUM_VOICES = 8;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AMT6001AudioProcessor)
 };

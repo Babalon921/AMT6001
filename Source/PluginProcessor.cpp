@@ -22,6 +22,12 @@ AMT6001AudioProcessor::AMT6001AudioProcessor()
                        )
 #endif
 {
+    synth.clearVoices();
+
+    for (int i = 0; i < 8; i++)
+        synth.addVoice(new BaseNote());  // your custom bass voice
+
+    synth.clearSounds();
 }
 
 AMT6001AudioProcessor::~AMT6001AudioProcessor()
@@ -156,6 +162,10 @@ void AMT6001AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
 
         // ..do something to the data...
     }
+
+    buffer.clear();
+
+    synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 
 //==============================================================================

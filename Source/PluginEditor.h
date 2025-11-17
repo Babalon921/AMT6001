@@ -30,7 +30,7 @@ private:
     // access the processor object that created it.
     AMT6001AudioProcessor& audioProcessor;
     juce::Slider midiVolume;
-    juce::Synthesiser synth;
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AMT6001AudioProcessorEditor)
 };
