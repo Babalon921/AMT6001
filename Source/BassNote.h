@@ -28,8 +28,9 @@ public:
 			isActive = false;
 		}
 	}
-	void pitchWheelMoved(int, int) {}
-	void controllerMoved(int, int) {}
+
+	void pitchWheelMoved(int newPitchWheelValue) override{}
+	void controllerMoved(int controllerNumber, int newControllerValue) override {}
 	void renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override
 	{
 		if (!isActive)

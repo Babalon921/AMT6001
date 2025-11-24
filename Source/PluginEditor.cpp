@@ -15,7 +15,7 @@ AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor (AMT6001AudioProcessor&
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize(200, 200);
+    setSize(400, 300);
     // these define the parameters of our slider object
     midiVolume.setSliderStyle(juce::Slider::LinearBarVertical);
     midiVolume.setRange(0.0, 127.0, 1.0);
@@ -26,6 +26,7 @@ AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor (AMT6001AudioProcessor&
     midiVolume.setValue(1.0);
     // this function adds the slider to the editor
     addAndMakeVisible(&midiVolume);
+    addAndMakeVisible(virtualKeyboard);
 }
 
 AMT6001AudioProcessorEditor::~AMT6001AudioProcessorEditor()
@@ -47,4 +48,5 @@ void AMT6001AudioProcessorEditor::paint (juce::Graphics& g)
 void AMT6001AudioProcessorEditor::resized()
 {
     midiVolume.setBounds(40, 30, 20, getHeight() - 60);
+    virtualKeyboard.setBounds(80, getHeight() - 100, getWidth() - 100, 80);
 }

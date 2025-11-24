@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="bp2EiN" name="AMT6001" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
+              pluginManufacturer="Harry Gray" pluginCode="amt6" pluginManufacturerCode="AM6P">
   <MAINGROUP id="v0aMLu" name="AMT6001">
     <GROUP id="{C88C2198-C843-199D-E583-C287CA384DE4}" name="Source">
+      <FILE id="NJ7hfL" name="BassSound.h" compile="0" resource="0" file="Source/BassSound.h"/>
       <FILE id="dP4sTP" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
+      <FILE id="mp6XCP" name="BassNote.h" compile="0" resource="0" file="Source/BassNote.h"/>
       <FILE id="GuArwd" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
       <FILE id="MZ222m" name="PluginEditor.cpp" compile="1" resource="0"
