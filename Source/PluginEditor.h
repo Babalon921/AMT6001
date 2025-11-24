@@ -31,9 +31,7 @@ private:
     AMT6001AudioProcessor& audioProcessor;
     juce::Slider midiVolume;
 
-    juce::MidiKeyboardState keyboardState;
-    juce::MidiKeyboardComponent virtualKeyboard{ keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard };
-
+    juce::MidiKeyboardComponent virtualKeyboard{ audioProcessor.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard };
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AMT6001AudioProcessorEditor)
