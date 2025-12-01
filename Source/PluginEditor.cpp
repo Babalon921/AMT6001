@@ -10,8 +10,8 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor (AMT6001AudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor(AMT6001AudioProcessor& p)
+    : AudioProcessorEditor(&p), audioProcessor(p)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -23,7 +23,8 @@ AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor (AMT6001AudioProcessor&
     midiVolume.setColour(juce::Slider::trackColourId, juce::Colours::red);
     midiVolume.setPopupDisplayEnabled(true, false, this);
     midiVolume.setTextValueSuffix(" Volume");
-    midiVolume.setValue(1.0);
+    midiVolume.setValue(100.0);
+    midiVolume.addListener(this);
     // this function adds the slider to the editor
     addAndMakeVisible(&midiVolume);
     addAndMakeVisible(virtualKeyboard);
@@ -31,6 +32,7 @@ AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor (AMT6001AudioProcessor&
 
 AMT6001AudioProcessorEditor::~AMT6001AudioProcessorEditor()
 {
+    midiVolume.removeListener(this);
 }
 
 //==============================================================================
@@ -47,6 +49,15 @@ void AMT6001AudioProcessorEditor::paint (juce::Graphics& g)
 
 void AMT6001AudioProcessorEditor::resized()
 {
-    midiVolume.setBounds(40, 30, 20, getHeight() - 60);
+    midiVolume.setBounds(40, 30, 20, getHeight() - 60); 
     virtualKeyboard.setBounds(80, getHeight() - 100, getWidth() - 100, 80);
+}
+
+void AMT6001AudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
+{
+    if (slider == &midiVolume)
+    {
+        // Normalize 0-127 to 0.0-1.0
+        audioProcessor.setMasterVolume(slider->getValue() / 127.0f);
+    }
 }

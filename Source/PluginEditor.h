@@ -14,7 +14,7 @@
 //=============================================================================
 /**
 */
-class AMT6001AudioProcessorEditor  : public juce::AudioProcessorEditor
+class AMT6001AudioProcessorEditor  : public juce::AudioProcessorEditor, private juce::Slider::Listener
 {
 public:
     AMT6001AudioProcessorEditor (AMT6001AudioProcessor&);
@@ -30,6 +30,7 @@ private:
     // access the processor object that created it.
     AMT6001AudioProcessor& audioProcessor;
     juce::Slider midiVolume;
+    void sliderValueChanged(juce::Slider*) override;
 
     juce::MidiKeyboardComponent virtualKeyboard{ audioProcessor.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard };
 

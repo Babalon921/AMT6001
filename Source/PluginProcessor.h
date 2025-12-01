@@ -53,13 +53,18 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+
+    void setMasterVolume(float newVolume) { masterVolume = newVolume; }
+    float getMasterVolume() const { return masterVolume; }
+
     juce::Synthesiser synth;
     juce::MidiKeyboardState keyboardState;
 
+   
 
 private:
     //==============================================================================
-
+    float masterVolume = 0.787f;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AMT6001AudioProcessor)
 };

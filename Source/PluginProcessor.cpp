@@ -149,6 +149,7 @@ void AMT6001AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce:
     keyboardState.processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
 
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    buffer.applyGain(masterVolume);
 }
 
 

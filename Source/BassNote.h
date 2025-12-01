@@ -18,14 +18,17 @@ public:
 		freq = juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber);
 		currentAngle = 0.0;
 		angleDelta = freq * 2.0 * juce::MathConstants<double>::pi / getSampleRate();
-		isActive = true;
+
+		adsr.setSampleRate(getSampleRate());
 		adsr.noteOn();
+		isActive = true;
+
 	}
 	void stopNote(float velocity, bool allowTailOff) override
 	{
 		adsr.noteOff();
 		if (!allowTailOff || adsr.isActive()) {
-			isActive = false;
+			clearCurrentNote();
 		}
 	}
 
@@ -39,7 +42,10 @@ public:
 		adsr.setSampleRate(getSampleRate());
 
 		while (numSamples > 0) {
-			float sample = std::sin(currentAngle) * 0.06f + std::sin(currentAngle * 2.0) * 0.2f;
+
+			double phase = std::fmod(currentAngle, juce::MathConstants<double>::twoPi);
+
+			float sample = std::sin(phase) * 0.06f + std::sin(phase * 2.0) * 0.2f;
 
 			sample *= adsr.getNextSample();
 			sample *= level;
@@ -48,13 +54,14 @@ public:
 				outputBuffer.addSample(chan, startSample, sample);
 
 			currentAngle += angleDelta;
+			while (currentAngle >= juce::MathConstants<double>::twoPi)
+				currentAngle -= juce::MathConstants<double>::twoPi;
+
 			startSample++;
 			numSamples--;
-
 		}
 		if (!adsr.isActive())
-			isActive = false;
-
+			clearCurrentNote();
 	}
 
 
@@ -68,6 +75,6 @@ private:
 	bool isActive = false;
 
 	juce::ADSR adsr;
-	juce::ADSR::Parameters adsrparameters { 0.01f, 0.1f, 0.7f, 0.1f };
+	juce::ADSR::Parameters adsrparameters{ 0.05f, 0.1f, 0.7f, 0.1f };
 
 };
