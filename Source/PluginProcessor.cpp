@@ -147,6 +147,15 @@ void AMT6001AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce:
         buffer.clear(i, 0, buffer.getNumSamples());
 
     keyboardState.processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
+    
+    for (int i = 0; i < synth.getNumVoices(); ++i)
+    {
+        if (auto* voice = dynamic_cast<BassNote*>(synth.getVoice(1)))
+        {
+            voice->setADSRParameters(attack, decay, sustain, release);
+            voice->setHarmonics(fundamentalAmp, harmonic2Amp);
+        }
+    }
 
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     buffer.applyGain(masterVolume);

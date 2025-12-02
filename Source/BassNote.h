@@ -20,6 +20,7 @@ public:
 		angleDelta = freq * 2.0 * juce::MathConstants<double>::pi / getSampleRate();
 
 		adsr.setSampleRate(getSampleRate());
+		adsr.setParameters(adsrparameters);
 		adsr.noteOn();
 		isActive = true;
 
@@ -29,11 +30,13 @@ public:
 		adsr.noteOff();
 		if (!allowTailOff || adsr.isActive()) {
 			clearCurrentNote();
+			isActive = false;
 		}
 	}
 
 	void pitchWheelMoved(int newPitchWheelValue) override{}
 	void controllerMoved(int controllerNumber, int newControllerValue) override {}
+
 	void renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override
 	{
 		if (!isActive)
@@ -61,10 +64,27 @@ public:
 			numSamples--;
 		}
 		if (!adsr.isActive())
+		{
 			clearCurrentNote();
+			isActive = false;
+		}
+			
 	}
 
+	void setADSRParameters(float attack, float decay, float sustain, float release)
+	{
+		adsrparameters.attack = attack;
+		adsrparameters.decay = decay;
+		adsrparameters.sustain = sustain;
+		adsrparameters.release = release;
+		adsr.setParameters(adsrparameters);
+	}
 
+	void setHarmonics(float fund, float harm2)
+	{
+		fundamentalAmp = fund;
+		harmonic2Amp = harm2;
+	}
 
 
 private:
@@ -73,6 +93,9 @@ private:
 	double angleDelta = 0.0;
 	double freq = 0.0;
 	bool isActive = false;
+
+	float fundamentalAmp = 0.06f;
+	float harmonic2Amp = 0.2f;
 
 	juce::ADSR adsr;
 	juce::ADSR::Parameters adsrparameters{ 0.05f, 0.1f, 0.7f, 0.1f };

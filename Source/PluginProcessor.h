@@ -57,6 +57,24 @@ public:
     void setMasterVolume(float newVolume) { masterVolume = newVolume; }
     float getMasterVolume() const { return masterVolume; }
 
+    //adsr
+    void setAttack(float value) { attack = value; }
+    void setDecay(float value) { decay = value; }
+    void setSustain(float value) { sustain = value; }
+    void setRelease(float value) { release = value; }
+
+    //harmonics
+    void setFundamental(float value) { fundamentalAmp = value; }
+    void setHarmonic2(float value) { harmonic2Amp = value; }
+
+    //parameters
+    float getAttack() const { return attack; }
+    float getDecay() const { return decay; }
+    float getSustain() const { return sustain; }
+    float getRelease() const { return release; }
+    float getFundamental() const { return fundamentalAmp; }
+    float getHarmonic2() const { return harmonic2Amp; }
+
     juce::Synthesiser synth;
     juce::MidiKeyboardState keyboardState;
 
@@ -65,6 +83,16 @@ public:
 private:
     //==============================================================================
     float masterVolume = 0.787f;
+
+    //adsr
+    float attack = 0.05f;
+    float decay = 0.1f;
+    float sustain = 0.7f;
+    float release = 0.1f;
+
+    //harmonics
+    float fundamentalAmp = 0.06f;
+    float harmonic2Amp = 0.2f;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AMT6001AudioProcessor)
 };
