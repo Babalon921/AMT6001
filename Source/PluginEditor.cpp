@@ -14,6 +14,13 @@ AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor(AMT6001AudioProcessor& 
     : AudioProcessorEditor(&p), audioProcessor(p)
 {
     setSize(600, 300);
+
+    getLookAndFeel().setColour(juce::Slider::thumbColourId, juce::Colours::darkred);
+    getLookAndFeel().setColour(juce::Slider::trackColourId, juce::Colours::crimson);
+    getLookAndFeel().setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::darkred);
+    getLookAndFeel().setColour(juce::TextButton::buttonColourId, juce::Colours::darkred);
+    getLookAndFeel().setColour(juce::Label::textColourId, juce::Colours::darkgrey);
+
     // volume slidera
     midiVolume.setSliderStyle(juce::Slider::LinearBarVertical);
     midiVolume.setRange(0.0, 127.0, 1.0);
@@ -134,12 +141,11 @@ void AMT6001AudioProcessorEditor::paint (juce::Graphics& g)
     g.fillAll(juce::Colours::black);
     g.setColour(juce::Colours::white);
     g.setFont(18.0f);
-    g.drawFittedText("Bass Volume", 0, 10, getWidth(), 30, juce::Justification::centred, 1);
+    g.drawFittedText("Volume", 5, 10, getWidth(), 10, juce::Justification::left, 1);
 
     g.setFont(14.0f);
     g.setColour(juce::Colours::red);
-    g.drawText("ENVELOPE", 80, 45, 200, 20, juce::Justification::left);
-    g.drawText("TONE", 350, 45, 200, 20, juce::Justification::left);
+    g.drawText("HGRAY-10783813", 480, 0, 200, 20, juce::Justification::left);
 
 
 
@@ -149,16 +155,16 @@ void AMT6001AudioProcessorEditor::resized()
 {
     midiVolume.setBounds(40, 30, 20, getHeight() - 60); 
 
-    int dialY = 80;
-    int dialSize = 80;
+    int dialY = 30;
+    int dialSize = 60;
 
     attack_Dial.setBounds(80, dialY, dialSize, dialSize);
     decay_Dial.setBounds(180, dialY, dialSize, dialSize);
     sustain_Dial.setBounds(280, dialY, dialSize, dialSize);
-    release_Dial.setBounds(80, dialY + 120, dialSize, dialSize);
+    release_Dial.setBounds(380, dialY, dialSize, dialSize);
 
-    fund.setBounds(380, dialY, dialSize, dialSize);
-    harmonic2.setBounds(480, dialY, dialSize, dialSize);
+    fund.setBounds(380, dialY + 90, dialSize, dialSize);
+    harmonic2.setBounds(480, dialY + 90, dialSize, dialSize);
 
     virtualKeyboard.setBounds(80, getHeight() - 100, getWidth() - 100, 80);
 }

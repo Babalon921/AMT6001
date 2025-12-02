@@ -28,7 +28,7 @@ public:
 	void stopNote(float velocity, bool allowTailOff) override
 	{
 		adsr.noteOff();
-		if (!allowTailOff || adsr.isActive()) {
+		if (!allowTailOff || !adsr.isActive()) {
 			clearCurrentNote();
 			isActive = false;
 		}
@@ -48,7 +48,7 @@ public:
 
 			double phase = std::fmod(currentAngle, juce::MathConstants<double>::twoPi);
 
-			float sample = std::sin(phase) * 0.06f + std::sin(phase * 2.0) * 0.2f;
+			float sample = std::sin(phase) * fundamentalAmp + std::sin(phase * 2.0) * harmonic2Amp;
 
 			sample *= adsr.getNextSample();
 			sample *= level;

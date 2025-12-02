@@ -150,7 +150,7 @@ void AMT6001AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce:
     
     for (int i = 0; i < synth.getNumVoices(); ++i)
     {
-        if (auto* voice = dynamic_cast<BassNote*>(synth.getVoice(1)))
+        if (auto* voice = dynamic_cast<BassNote*>(synth.getVoice(i)))
         {
             voice->setADSRParameters(attack, decay, sustain, release);
             voice->setHarmonics(fundamentalAmp, harmonic2Amp);
