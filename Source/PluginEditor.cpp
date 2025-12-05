@@ -37,9 +37,10 @@ AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor(AMT6001AudioProcessor& 
     attack_Dial.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     attack_Dial.setRange(0.001, 2.0, 0.001);
     attack_Dial.setValue(0.05);
-    attack_Dial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 20);
+    attack_Dial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 30, 10);
     attack_Dial.setPopupDisplayEnabled(true, false, this);
     attack_Dial.setTextValueSuffix(" s");
+    attack_Dial.setNumDecimalPlacesToDisplay(2);
     attack_Dial.addListener(this);
     addAndMakeVisible(&attack_Dial);
 
@@ -52,9 +53,11 @@ AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor(AMT6001AudioProcessor& 
     decay_Dial.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     decay_Dial.setRange(0.001, 2.0, 0.001);
     decay_Dial.setValue(0.1);
-    decay_Dial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 20);
+    decay_Dial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 30, 10);
     decay_Dial.setPopupDisplayEnabled(true, false, this);
     decay_Dial.setTextValueSuffix(" s");
+    decay_Dial.setNumDecimalPlacesToDisplay(2);
+
     decay_Dial.addListener(this);
     addAndMakeVisible(&decay_Dial);
 
@@ -67,8 +70,9 @@ AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor(AMT6001AudioProcessor& 
     sustain_Dial.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     sustain_Dial.setRange(0.0, 1.0, 0.01);
     sustain_Dial.setValue(0.7);
-    sustain_Dial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 20);
+    sustain_Dial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 30, 10);
     sustain_Dial.setPopupDisplayEnabled(true, false, this);
+    sustain_Dial.setNumDecimalPlacesToDisplay(2);
     sustain_Dial.addListener(this);
     addAndMakeVisible(&sustain_Dial);
 
@@ -81,9 +85,10 @@ AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor(AMT6001AudioProcessor& 
     release_Dial.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     release_Dial.setRange(0.001, 5.0, 0.001);
     release_Dial.setValue(0.1);
-    release_Dial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 20);
+    release_Dial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 30, 10);
     release_Dial.setPopupDisplayEnabled(true, false, this);
     release_Dial.setTextValueSuffix(" s");
+    release_Dial.setNumDecimalPlacesToDisplay(2);
     release_Dial.addListener(this);
     addAndMakeVisible(&release_Dial);
 
@@ -96,8 +101,9 @@ AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor(AMT6001AudioProcessor& 
     fund.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     fund.setRange(0.0, 1.0, 0.01);
     fund.setValue(0.06);
-    fund.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 20);
+    fund.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 30, 10);
     fund.setPopupDisplayEnabled(true, false, this);
+    fund.setNumDecimalPlacesToDisplay(2);
     fund.addListener(this);
     addAndMakeVisible(&fund);
 
@@ -110,8 +116,9 @@ AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor(AMT6001AudioProcessor& 
     harmonic2.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     harmonic2.setRange(0.0, 1.0, 0.01);
     harmonic2.setValue(0.2);
-    harmonic2.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 20);
+    harmonic2.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 30, 10);
     harmonic2.setPopupDisplayEnabled(true, false, this);
+    harmonic2.setNumDecimalPlacesToDisplay(2);
     harmonic2.addListener(this);
     addAndMakeVisible(&harmonic2);
 
@@ -120,6 +127,9 @@ AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor(AMT6001AudioProcessor& 
     harmonic2_label.attachToComponent(&harmonic2, false);
     addAndMakeVisible(&harmonic2_label);
 
+
+    //adsr graph
+    addAndMakeVisible(adsrGraph);
     //keyboard
     addAndMakeVisible(virtualKeyboard);
 }
@@ -153,18 +163,21 @@ void AMT6001AudioProcessorEditor::paint (juce::Graphics& g)
 
 void AMT6001AudioProcessorEditor::resized()
 {
-    midiVolume.setBounds(40, 30, 20, getHeight() - 60); 
+    midiVolume.setBounds(20, 30, 20, getHeight() - 60); 
 
     int dialY = 30;
-    int dialSize = 60;
+    int dialSize = 55;
 
     attack_Dial.setBounds(80, dialY, dialSize, dialSize);
-    decay_Dial.setBounds(180, dialY, dialSize, dialSize);
-    sustain_Dial.setBounds(280, dialY, dialSize, dialSize);
-    release_Dial.setBounds(380, dialY, dialSize, dialSize);
+    decay_Dial.setBounds(140, dialY, dialSize, dialSize);
+    sustain_Dial.setBounds(200, dialY, dialSize, dialSize);
+    release_Dial.setBounds(260, dialY, dialSize, dialSize);
 
-    fund.setBounds(380, dialY + 90, dialSize, dialSize);
-    harmonic2.setBounds(480, dialY + 90, dialSize, dialSize);
+    fund.setBounds(320, dialY, dialSize, dialSize);
+    harmonic2.setBounds(380, dialY, dialSize, dialSize);
+    
+    adsrGraph.setBounds(80, dialY + 65, 350, 100);
+
 
     virtualKeyboard.setBounds(80, getHeight() - 100, getWidth() - 100, 80);
 }
@@ -178,18 +191,22 @@ void AMT6001AudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
     else if (slider == &attack_Dial)
     {
         audioProcessor.setAttack(slider->getValue());
+        adsrGraph.setAttack(slider->getValue());
     }
     else if (slider == &decay_Dial)
     {
         audioProcessor.setDecay(slider->getValue());
+        adsrGraph.setDecay(slider->getValue());
     }
     else if (slider == &sustain_Dial)
     {
         audioProcessor.setSustain(slider->getValue());
+        adsrGraph.setSustain(slider->getValue());
     }
     else if (slider == &release_Dial)
     {
         audioProcessor.setRelease(slider->getValue());
+        adsrGraph.setRelease(slider->getValue());
     }
     else if (slider == &fund)
     {

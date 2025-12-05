@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "ADSRGraph.h"
 
 //=============================================================================
 /**
@@ -24,6 +25,7 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
+    ADSRGraph adsrGraph;
 
 private:
 

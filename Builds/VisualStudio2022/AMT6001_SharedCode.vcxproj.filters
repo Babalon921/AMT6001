@@ -3531,6 +3531,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\ADSRGraph.h">
+      <Filter>AMT6001\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\BassSound.h">
       <Filter>AMT6001\Source</Filter>
     </ClInclude>

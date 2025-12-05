@@ -2843,6 +2843,7 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\ADSRGraph.h"/>
     <ClInclude Include="..\..\Source\BassSound.h"/>
     <ClInclude Include="..\..\Source\BassNote.h"/>
     <ClInclude Include="..\..\Source\PluginProcessor.h"/>
