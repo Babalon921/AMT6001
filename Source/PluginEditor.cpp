@@ -127,9 +127,25 @@ AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor(AMT6001AudioProcessor& 
     harmonic2_label.attachToComponent(&harmonic2, false);
     addAndMakeVisible(&harmonic2_label);
 
+    //distortion
+    distortion_Dial.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+    distortion_Dial.setRange(0.0, 1.0, 0.01);
+    distortion_Dial.setValue(0.0);
+    distortion_Dial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 30, 10);
+    distortion_Dial.setPopupDisplayEnabled(true, false, this);
+    distortion_Dial.setNumDecimalPlacesToDisplay(2);
+    distortion_Dial.addListener(this);
+    addAndMakeVisible(&distortion_Dial);
+
+    distortion_label.setText("Distortion", juce::dontSendNotification);
+    distortion_label.setJustificationType(juce::Justification::centred);
+    distortion_label.attachToComponent(&distortion_Dial, false);
+    addAndMakeVisible(&distortion_label);
 
     //adsr graph
     addAndMakeVisible(adsrGraph);
+    //osc
+    addAndMakeVisible(oscilloscope);
     //keyboard
     addAndMakeVisible(virtualKeyboard);
 }
@@ -143,6 +159,7 @@ AMT6001AudioProcessorEditor::~AMT6001AudioProcessorEditor()
     release_Dial.removeListener(this);
     fund.removeListener(this);
     harmonic2.removeListener(this);
+    distortion_Dial.removeListener(this);
 }
 
 //==============================================================================
@@ -175,9 +192,12 @@ void AMT6001AudioProcessorEditor::resized()
 
     fund.setBounds(320, dialY, dialSize, dialSize);
     harmonic2.setBounds(380, dialY, dialSize, dialSize);
+    //460, dialY + 110, dialSize, dialSize << for reverb later
+    distortion_Dial.setBounds(520, dialY + 110, dialSize, dialSize);
     
     adsrGraph.setBounds(80, dialY + 65, 350, 100);
 
+    oscilloscope.setBounds(450, 15, 140, 100);
 
     virtualKeyboard.setBounds(80, getHeight() - 100, getWidth() - 100, 80);
 }
@@ -215,5 +235,9 @@ void AMT6001AudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
     else if (slider == &harmonic2)
     {
         audioProcessor.setHarmonic2(slider->getValue());
+    }
+    else if (slider == &distortion_Dial)
+    {
+        audioProcessor.setDistortion(slider->getValue());
     }
 }

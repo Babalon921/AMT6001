@@ -44,7 +44,7 @@
  #define JucePlugin_Name                   "AMT6001"
 #endif
 #ifndef  JucePlugin_Desc
- #define JucePlugin_Desc                   "AMT6001"
+ #define JucePlugin_Desc                   "Sythn Plugin"
 #endif
 #ifndef  JucePlugin_Manufacturer
  #define JucePlugin_Manufacturer           "Harry Gray"
@@ -56,10 +56,10 @@
  #define JucePlugin_ManufacturerEmail      ""
 #endif
 #ifndef  JucePlugin_ManufacturerCode
- #define JucePlugin_ManufacturerCode       0x414d3650
+ #define JucePlugin_ManufacturerCode       0x414d5436
 #endif
 #ifndef  JucePlugin_PluginCode
- #define JucePlugin_PluginCode             0x616d7436
+ #define JucePlugin_PluginCode             0x414d5436
 #endif
 #ifndef  JucePlugin_IsSynth
  #define JucePlugin_IsSynth                1

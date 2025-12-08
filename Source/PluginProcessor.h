@@ -67,6 +67,9 @@ public:
     void setFundamental(float value) { fundamentalAmp = value; }
     void setHarmonic2(float value) { harmonic2Amp = value; }
 
+    //distortion
+    void setDistortion(float value) { distortionAmount = value; }
+
     //parameters
     float getAttack() const { return attack; }
     float getDecay() const { return decay; }
@@ -93,6 +96,8 @@ private:
     //harmonics
     float fundamentalAmp = 0.06f;
     float harmonic2Amp = 0.2f;
+
+    float distortionAmount = 0.0f;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AMT6001AudioProcessor)
 };

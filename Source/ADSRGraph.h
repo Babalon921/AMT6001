@@ -21,8 +21,9 @@ public:
 
     void paint(juce::Graphics& g) override
     {
-        g.fillAll(juce::Colours::black);
+        g.fillAll(juce::Colour(0xFF1a1a1a)); //#1a1a1a grey color
         g.setColour(juce::Colours::darkgrey);
+
         g.drawRect(getLocalBounds(), 1);
 
         auto bounds = getLocalBounds().reduced(5);
@@ -36,7 +37,7 @@ public:
         float releaseX = width;
 
         juce::Path envelopePath;
-        
+
         envelopePath.startNewSubPath(bounds.getX(), bounds.getBottom());
         envelopePath.lineTo(bounds.getX() + attackX, bounds.getY());
         float sustainY = bounds.getY() + (1.0f - sustainLevel) * height;
@@ -44,8 +45,12 @@ public:
         envelopePath.lineTo(bounds.getX() + sustainX, sustainY);
         envelopePath.lineTo(bounds.getX() + releaseX, bounds.getBottom());
 
-
-        g.setColour(juce::Colours::crimson);
+        juce::ColourGradient gradient(
+            juce::Colour(0xFFeb4034), bounds.getX(), bounds.getCentreY(),
+            juce::Colour(0xFFffff00), bounds.getRight(), bounds.getCentreY(),
+            false
+        );
+        g.setGradientFill(gradient);
         g.strokePath(envelopePath, juce::PathStrokeType(2.0f));
     }
 

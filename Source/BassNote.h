@@ -53,6 +53,8 @@ public:
 			sample *= adsr.getNextSample();
 			sample *= level;
 
+			sample = applyDistortion(sample);
+
 			for (int chan = 0; chan < outputBuffer.getNumChannels(); ++chan)
 				outputBuffer.addSample(chan, startSample, sample);
 
@@ -80,6 +82,11 @@ public:
 		adsr.setParameters(adsrparameters);
 	}
 
+	void setDistortion(float dist)
+	{
+		distortionAmount = dist;
+	}
+
 	void setHarmonics(float fund, float harm2)
 	{
 		fundamentalAmp = fund;
@@ -88,6 +95,20 @@ public:
 
 
 private:
+	float applyDistortion(float sample)
+	{
+		if (distortionAmount <= 0.0f)
+			return sample;
+
+		float bitDepth = 16.0f - (distortionAmount * 13.0f); 
+		float steps = std::pow(2.0f, bitDepth);
+
+		sample = std::round(sample * steps) / steps;
+
+		return sample;
+	}
+	float distortionAmount = 0.0f;
+
 	float level = 0.0f;
 	double currentAngle = 0.0;
 	double angleDelta = 0.0;

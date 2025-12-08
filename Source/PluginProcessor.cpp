@@ -154,10 +154,16 @@ void AMT6001AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce:
         {
             voice->setADSRParameters(attack, decay, sustain, release);
             voice->setHarmonics(fundamentalAmp, harmonic2Amp);
+            voice->setDistortion(distortionAmount);
         }
     }
 
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    if (auto* editor = dynamic_cast<AMT6001AudioProcessorEditor*>(getActiveEditor()))
+    {
+        editor->oscilloscope.pushBuffer(buffer);
+    }
+
     buffer.applyGain(masterVolume);
 }
 

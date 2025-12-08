@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "ADSRGraph.h"
+#include "Osc.h"
 
 //=============================================================================
 /**
@@ -26,9 +27,12 @@ public:
     void resized() override;
 
     ADSRGraph adsrGraph;
+    Oscilloscope oscilloscope;
 
 private:
 
+    //OSC
+   
     // Changed Value Area
     void sliderValueChanged(juce::Slider*) override;
 
@@ -47,6 +51,9 @@ private:
     juce::Slider fund;
     juce::Slider harmonic2;
 
+
+    juce::Slider distortion_Dial;
+
     //labels
     juce::Label attack_label;
     juce::Label decay_label;
@@ -54,7 +61,7 @@ private:
     juce::Label release_label;
     juce::Label fund_label;
     juce::Label harmonic2_label;
-
+    juce::Label distortion_label;
 
     //midi keyboard
     juce::MidiKeyboardComponent virtualKeyboard{ audioProcessor.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard };
