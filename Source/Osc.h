@@ -16,10 +16,6 @@ class Oscilloscope : public juce::Component, public juce::Timer
 public:
     Oscilloscope()
     {
-        //old
-        //setSize(300, 200);
-        //startTimerHz(60);
-        //new
         setSize(300, 200);
         audioPoints.resize(512, 0.0f); //pre allocate due to error
         startTimerHz(60); 

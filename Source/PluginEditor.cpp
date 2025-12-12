@@ -107,7 +107,7 @@ AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor(AMT6001AudioProcessor& 
     fund.addListener(this);
     addAndMakeVisible(&fund);
 
-    fund_label.setText("Fundamental", juce::dontSendNotification);
+    fund_label.setText("Fund", juce::dontSendNotification);
     fund_label.setJustificationType(juce::Justification::centred);
     fund_label.attachToComponent(&fund, false);
     addAndMakeVisible(&fund_label);
@@ -122,10 +122,25 @@ AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor(AMT6001AudioProcessor& 
     harmonic2.addListener(this);
     addAndMakeVisible(&harmonic2);
 
-    harmonic2_label.setText("2nd Harmonic", juce::dontSendNotification);
+    harmonic2_label.setText("2nd", juce::dontSendNotification);
     harmonic2_label.setJustificationType(juce::Justification::centred);
     harmonic2_label.attachToComponent(&harmonic2, false);
     addAndMakeVisible(&harmonic2_label);
+
+    //detune
+    harmonic2Detune_Dial.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+    harmonic2Detune_Dial.setRange(1.0, 4.0, 0.01);
+    harmonic2Detune_Dial.setValue(2.0);
+    harmonic2Detune_Dial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 30, 10);
+    harmonic2Detune_Dial.setPopupDisplayEnabled(true, false, this);
+    harmonic2Detune_Dial.setNumDecimalPlacesToDisplay(2);
+    harmonic2Detune_Dial.addListener(this);
+    addAndMakeVisible(&harmonic2Detune_Dial);
+
+    harmonic2Detune_label.setText("Detune", juce::dontSendNotification);
+    harmonic2Detune_label.setJustificationType(juce::Justification::centred);
+    harmonic2Detune_label.attachToComponent(&harmonic2Detune_Dial, false);
+    addAndMakeVisible(&harmonic2Detune_label);
 
     //distortion
     distortion_Dial.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
@@ -141,6 +156,13 @@ AMT6001AudioProcessorEditor::AMT6001AudioProcessorEditor(AMT6001AudioProcessor& 
     distortion_label.setJustificationType(juce::Justification::centred);
     distortion_label.attachToComponent(&distortion_Dial, false);
     addAndMakeVisible(&distortion_label);
+
+    //turbo button
+    turboButton.setButtonText("TURBO");
+    turboButton.setClickingTogglesState(true);
+    turboButton.setColour(juce::TextButton::buttonOnColourId, juce::Colours::red);
+    turboButton.addListener(this);
+    addAndMakeVisible(&turboButton);
 
     //adsr graph
     addAndMakeVisible(adsrGraph);
@@ -160,9 +182,10 @@ AMT6001AudioProcessorEditor::~AMT6001AudioProcessorEditor()
     fund.removeListener(this);
     harmonic2.removeListener(this);
     distortion_Dial.removeListener(this);
+    turboButton.removeListener(this);
 }
 
-//==============================================================================
+
 void AMT6001AudioProcessorEditor::paint (juce::Graphics& g)
 {
     g.fillAll(juce::Colours::black);
@@ -192,10 +215,14 @@ void AMT6001AudioProcessorEditor::resized()
 
     fund.setBounds(320, dialY, dialSize, dialSize);
     harmonic2.setBounds(380, dialY, dialSize, dialSize);
+    harmonic2Detune_Dial.setBounds(460, dialY + 110, dialSize, dialSize);
     //460, dialY + 110, dialSize, dialSize << for reverb later
     distortion_Dial.setBounds(520, dialY + 110, dialSize, dialSize);
     
-    adsrGraph.setBounds(80, dialY + 65, 350, 100);
+
+    turboButton.setBounds(390, dialY + 100, 55, 55);
+
+    adsrGraph.setBounds(80, dialY + 65, 300, 100);
 
     oscilloscope.setBounds(450, 15, 140, 100);
 
@@ -240,4 +267,16 @@ void AMT6001AudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
     {
         audioProcessor.setDistortion(slider->getValue());
     }
+    else if (slider == &harmonic2Detune_Dial)
+    {
+        audioProcessor.setHarmonic2Detune(slider->getValue());
+    }
+
 }
+    void AMT6001AudioProcessorEditor::buttonClicked(juce::Button * button)
+    {
+        if (button == &turboButton)
+        {
+            audioProcessor.setTurboEnabled(turboButton.getToggleState());
+        }
+    }

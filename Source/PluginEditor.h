@@ -16,7 +16,7 @@
 //=============================================================================
 /**
 */
-class AMT6001AudioProcessorEditor  : public juce::AudioProcessorEditor, private juce::Slider::Listener
+class AMT6001AudioProcessorEditor  : public juce::AudioProcessorEditor, private juce::Slider::Listener, private juce::Button::Listener
 {
 public:
     AMT6001AudioProcessorEditor (AMT6001AudioProcessor&);
@@ -35,6 +35,7 @@ private:
    
     // Changed Value Area
     void sliderValueChanged(juce::Slider*) override;
+    void buttonClicked(juce::Button*) override;
 
     AMT6001AudioProcessor& audioProcessor;
 
@@ -50,6 +51,7 @@ private:
     //harmonics 
     juce::Slider fund;
     juce::Slider harmonic2;
+    juce::Slider harmonic2Detune_Dial;
 
 
     juce::Slider distortion_Dial;
@@ -62,6 +64,9 @@ private:
     juce::Label fund_label;
     juce::Label harmonic2_label;
     juce::Label distortion_label;
+    juce::Label harmonic2Detune_label;
+    //text button
+    juce::TextButton turboButton;
 
     //midi keyboard
     juce::MidiKeyboardComponent virtualKeyboard{ audioProcessor.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard };

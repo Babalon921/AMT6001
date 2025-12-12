@@ -48,7 +48,7 @@ public:
 
 			double phase = std::fmod(currentAngle, juce::MathConstants<double>::twoPi);
 
-			float sample = std::sin(phase) * fundamentalAmp + std::sin(phase * 2.0) * harmonic2Amp;
+			float sample = std::sin(phase) * fundamentalAmp + std::sin(phase * harmonic2Detune) * harmonic2Amp;
 
 			sample *= adsr.getNextSample();
 			sample *= level;
@@ -93,6 +93,10 @@ public:
 		harmonic2Amp = harm2;
 	}
 
+	void setHarmonic2Detune(float detune)
+	{
+		harmonic2Detune = detune;
+	}
 
 private:
 	float applyDistortion(float sample)
@@ -117,6 +121,7 @@ private:
 
 	float fundamentalAmp = 0.06f;
 	float harmonic2Amp = 0.2f;
+	float harmonic2Detune = 2.0f;
 
 	juce::ADSR adsr;
 	juce::ADSR::Parameters adsrparameters{ 0.05f, 0.1f, 0.7f, 0.1f };

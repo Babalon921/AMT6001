@@ -66,9 +66,14 @@ public:
     //harmonics
     void setFundamental(float value) { fundamentalAmp = value; }
     void setHarmonic2(float value) { harmonic2Amp = value; }
+    void setHarmonic2Detune(float value) { harmonic2Detune = value; }
 
     //distortion
     void setDistortion(float value) { distortionAmount = value; }
+
+    //turbo (reverb)
+    void setTurboEnabled(bool enabled) { turboEnabled = enabled; }
+    bool isTurboEnabled() const { return turboEnabled; }
 
     //parameters
     float getAttack() const { return attack; }
@@ -77,6 +82,7 @@ public:
     float getRelease() const { return release; }
     float getFundamental() const { return fundamentalAmp; }
     float getHarmonic2() const { return harmonic2Amp; }
+    float getHarmonic2Detune() const { return harmonic2Detune; }
 
     juce::Synthesiser synth;
     juce::MidiKeyboardState keyboardState;
@@ -96,8 +102,14 @@ private:
     //harmonics
     float fundamentalAmp = 0.06f;
     float harmonic2Amp = 0.2f;
+    float harmonic2Detune = 2.0f;
 
     float distortionAmount = 0.0f;
+
+    //turbo reverb
+    bool turboEnabled = false;
+    juce::Reverb reverb;
+    juce::Reverb::Parameters reverbParams;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AMT6001AudioProcessor)
 };
