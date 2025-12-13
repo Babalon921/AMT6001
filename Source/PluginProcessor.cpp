@@ -31,6 +31,16 @@ AMT6001AudioProcessor::AMT6001AudioProcessor()
 
     synth.clearSounds();
     synth.addSound(new BassSound());
+
+    //reverb parameters
+    reverbParams.roomSize = 0.7f;
+    reverbParams.damping = 0.5f;
+    reverbParams.wetLevel = 0.4f;
+    reverbParams.dryLevel = 0.6f;
+    reverbParams.width = 1.0f;
+    reverbParams.freezeMode = 0.0f;
+    reverb.setParameters(reverbParams);
+
 }
 
 AMT6001AudioProcessor::~AMT6001AudioProcessor()
@@ -102,7 +112,8 @@ void AMT6001AudioProcessor::changeProgramName (int index, const juce::String& ne
 //==============================================================================
 void AMT6001AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-synth.setCurrentPlaybackSampleRate(sampleRate);
+    synth.setCurrentPlaybackSampleRate(sampleRate);
+    reverb.setSampleRate(sampleRate);
 }
 
 void AMT6001AudioProcessor::releaseResources()
@@ -161,6 +172,24 @@ void AMT6001AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce:
 
     
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+
+    //turbo
+    if (turboEnabled && buffer.getNumChannels() > 0 && buffer.getNumSamples() > 0)
+    {
+        reverb.setParameters(reverbParams);
+
+        if (buffer.getNumChannels() >= 2)
+        {
+            reverb.processStereo(buffer.getWritePointer(0),
+                buffer.getWritePointer(1),
+                buffer.getNumSamples());
+        }
+        else if (buffer.getNumChannels() == 1)
+        {
+            reverb.processMono(buffer.getWritePointer(0),
+                buffer.getNumSamples());
+        }
+    }
     if (auto* editor = dynamic_cast<AMT6001AudioProcessorEditor*>(getActiveEditor()))
     {
         editor->oscilloscope.pushBuffer(buffer);
