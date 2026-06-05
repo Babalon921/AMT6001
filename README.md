@@ -10,7 +10,7 @@
 A polyphonic ADSR synthesizer VST3/AU plugin built with the [JUCE](https://juce.com/) framework in C++. Features a real-time oscilloscope, ADSR envelope visualizer, harmonic control, bit-crush distortion, and a "Turbo" reverb mode — all controllable via MIDI keyboard or mouse input.
 
 <img width="937" height="523" alt="imageforgit" src="https://github.com/user-attachments/assets/f2097d2d-4dbb-4e57-ace6-7d68be9bc633" />
-> *Plugin running inside FL Studio 2024*
+
 
 ---
 
